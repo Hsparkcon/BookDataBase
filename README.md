@@ -3,6 +3,7 @@
 Currently the code is work-in-progress, but can be compiled.
 
 This code written to learn following concepts.
+
 __STL Map__
 * STL Map is used with STL Vector to store book data list.
 * ISBN-13 code is used as a first element - 'key' - of Map container
