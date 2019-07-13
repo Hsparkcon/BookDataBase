@@ -1,13 +1,14 @@
 #include "bookDatabase.h"
 
 bookDatabase::bookDatabase() {
+	mBookList;
 	mBookDataRequest = { "Title", "Author", "Publisher", "Date of Publication", "Genre" };
 	mFlagSort = false;
 	mFlagCollect = false;
 }
 
 bookDatabase::~bookDatabase() {
-
+	std::cout << "See You Next Time" << std::endl;
 }
 
 void bookDatabase::methodSelection() {
@@ -18,8 +19,7 @@ void bookDatabase::methodSelection() {
 	std::cout << "1 - Add a new book data" << std::endl;
 	std::cout << "2 - Remove a book data" << std::endl;
 	std::cout << "3 - Modify a book data" << std::endl;
-	std::cout << "4 - Search a book" << std::endl;
-	std::cout << "5 - Sort a book list" << std::endl;
+	std::cout << "4 - Display book List" << std::endl;
 	std::cout << "0 - Exit" << std::endl;
 
 	std::cin >> localSelection;
@@ -39,11 +39,7 @@ void bookDatabase::methodSelection() {
 		break;
 
 	case 4:
-		bookDatabase::searchData();
-		break;
-
-	case 5:
-		bookDatabase::sortData();
+		bookDatabase::displayData();
 		break;
 
 	case 0:
@@ -142,7 +138,7 @@ bool bookDatabase::removeData() {
 
 }
 
-std::string bookDatabase::searchData() const {
+std::string bookDatabase::searchData() {
 
 	int localSelection = NULL;
 	std::string searchKeyword;
@@ -207,7 +203,7 @@ std::string bookDatabase::searchData() const {
 	return searchResult;
 }
 
-void bookDatabase::displayData() const {
+void bookDatabase::displayData() {
 
 	int localOperation;
 
@@ -222,12 +218,25 @@ void bookDatabase::displayData() const {
 
 	switch (localOperation) {
 		case 1:
+			std::cout << "Display Entire Book List" << std::endl;
+			for (auto i : mBookList) {
+				std::cout << i.first << i.second[0] << i.second[1] << i.second[2] << i.second[3] << std::endl;
+			}
 			break;
+
 		case 2:
+			std::cout << "Display Sorted Book List" << std::endl;
+			bookDatabase::sortData();
+			for (auto i : mBookSort) {
+				std::cout << i.second << mBookList[i.second][0] << mBookList[i.second][1] << mBookList[i.second][2] << mBookList[i.second][3] << std::endl;
+			}
 			break;
+
 		case 3:
+			std::cout << "Display Collected Book List" << std::endl;
 			break;
 		case 4:
+			std::cout << "Exit Display Menu" << std::endl;
 			break;
 	}
 

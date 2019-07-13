@@ -16,8 +16,8 @@ class bookDatabase
 		void addData();
 		bool setData();
 		bool removeData();
-		std::string searchData() const;
-		void displayData() const;
+		std::string searchData();
+		void displayData();
 		
 
 	private:
