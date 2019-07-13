@@ -2,7 +2,7 @@
 
 bookDatabase::bookDatabase() {
 	mBookList;
-	mBookDataRequest = { "Title", "Author", "Publisher", "Date of Publication", "Genre" };
+	mBookDataRequest = { "Title", "Author", "Publisher", "Genre", "Date of Publication" };
 	mFlagSort = false;
 	mFlagCollect = false;
 }
@@ -14,44 +14,47 @@ bookDatabase::~bookDatabase() {
 void bookDatabase::methodSelection() {
 
 	int localSelection = NULL;
+	bool stillWorking = true;
 
-	std::cout << "Please Select the Operation" << std::endl;
-	std::cout << "1 - Add a new book data" << std::endl;
-	std::cout << "2 - Remove a book data" << std::endl;
-	std::cout << "3 - Modify a book data" << std::endl;
-	std::cout << "4 - Display book List" << std::endl;
-	std::cout << "0 - Exit" << std::endl;
+	while (stillWorking == true) {
 
-	std::cin >> localSelection;
+		std::cout << "Please Select the Operation" << std::endl;
+		std::cout << "1 - Add a new book data" << std::endl;
+		std::cout << "2 - Remove a book data" << std::endl;
+		std::cout << "3 - Modify a book data" << std::endl;
+		std::cout << "4 - Display book List" << std::endl;
+		std::cout << "0 - Exit" << std::endl;
 
-	switch (localSelection)
-	{
-	case 1:
-		bookDatabase::addData();
-		break;
+		std::cin >> localSelection;
 
-	case 2:
-		bookDatabase::removeData();
-		break;
+		switch (localSelection)
+		{
+		case 1:
+			bookDatabase::addData();
+			break;
 
-	case 3:
-		bookDatabase::setData();
-		break;
+		case 2:
+			bookDatabase::removeData();
+			break;
 
-	case 4:
-		bookDatabase::displayData();
-		break;
+		case 3:
+			bookDatabase::setData();
+			break;
 
-	case 0:
-		std::cout << "Exit the database." << std::endl;
-		break;
+		case 4:
+			bookDatabase::displayData();
+			break;
 
-	default:
-		std::cout << "Please select the option from the list." << std::endl;
-		break;
+		case 0:
+			std::cout << "Exit the database." << std::endl;
+			stillWorking = false;
+			break;
+
+		default:
+			std::cout << "Please select the option from the list." << std::endl;
+			break;
+		}
 	}
-
-
 }
 
 void bookDatabase::getData() const {
@@ -132,10 +135,12 @@ bool bookDatabase::setData() {
 		}
 	}
 
+	return true;
+
 }
 
 bool bookDatabase::removeData() {
-
+	return true;
 }
 
 std::string bookDatabase::searchData() {
@@ -208,7 +213,7 @@ void bookDatabase::displayData() {
 	int localOperation;
 
 	std::cout << "Display Book list" << std::endl;
-	std::cout << "Please Select Display Option"
+	std::cout << "Please Select Display Option" << '\n'
 		<< "1 - Entire List" << '\n'
 		<< "2 - Sorted by Keyword" << '\n'
 		<< "3 - Collected by Keywordk" << '\n'
@@ -220,7 +225,14 @@ void bookDatabase::displayData() {
 		case 1:
 			std::cout << "Display Entire Book List" << std::endl;
 			for (auto i : mBookList) {
-				std::cout << i.first << i.second[0] << i.second[1] << i.second[2] << i.second[3] << std::endl;
+				std::cout << 
+					std::setw(17) << i.first << "	" <<			// ISBN-13
+					std::setw(10) << i.second[0] << "	" <<		// TITLE
+					std::setw(10) << i.second[1] << "	" <<		// AUTHOR
+					std::setw(10) << i.second[2] << "	" <<		// PUBLISHER
+					std::setw(10) << i.second[3] << "	" <<		// Genre
+					std::setw(10) << i.second[4] << "	" <<		// DATE OF PUBLICATION
+					std::endl;
 			}
 			break;
 
@@ -228,12 +240,23 @@ void bookDatabase::displayData() {
 			std::cout << "Display Sorted Book List" << std::endl;
 			bookDatabase::sortData();
 			for (auto i : mBookSort) {
-				std::cout << i.second << mBookList[i.second][0] << mBookList[i.second][1] << mBookList[i.second][2] << mBookList[i.second][3] << std::endl;
+				std::cout << 
+					i.second << 
+					mBookList[i.second][0] << 
+					mBookList[i.second][1] << 
+					mBookList[i.second][2] << 
+					mBookList[i.second][3] <<
+					mBookList[i.second][4] <<
+					std::endl;
 			}
 			break;
 
 		case 3:
 			std::cout << "Display Collected Book List" << std::endl;
+			bookDatabase::collectData();
+			for (auto i : mBookCollect) {
+				std::cout << i << mBookList[i][0] << mBookList[i][1] << mBookList[i][2] << mBookList[i][3] << std::endl;
+			}
 			break;
 		case 4:
 			std::cout << "Exit Display Menu" << std::endl;
@@ -249,7 +272,7 @@ void bookDatabase::displayData() {
 
 
 bool bookDatabase::checkISBN() {
-
+	return true;
 }
 
 void bookDatabase::loadData() {
