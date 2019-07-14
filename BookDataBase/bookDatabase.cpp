@@ -5,6 +5,7 @@ bookDatabase::bookDatabase() {
 	mBookDataRequest = { "Title", "Author", "Publisher", "Genre", "Date of Publication" };
 	mFlagSort = false;
 	mFlagCollect = false;
+	mFlagCutomizedDisplay = false;
 }
 
 bookDatabase::~bookDatabase() {
@@ -14,15 +15,15 @@ bookDatabase::~bookDatabase() {
 void bookDatabase::methodSelection() {
 
 	int localSelection = NULL;
-	bool stillWorking = true;
+	bool workInProgress = true;
 
-	while (stillWorking == true) {
+	while (workInProgress == true) {
 
 		std::cout << "Please Select the Operation" << std::endl;
 		std::cout << "1 - Add a new book data" << std::endl;
 		std::cout << "2 - Remove a book data" << std::endl;
 		std::cout << "3 - Modify a book data" << std::endl;
-		std::cout << "4 - Display book List" << std::endl;
+		std::cout << "4 - Display List of Book" << std::endl;
 		std::cout << "0 - Exit" << std::endl;
 
 		std::cin >> localSelection;
@@ -47,14 +48,16 @@ void bookDatabase::methodSelection() {
 
 		case 0:
 			std::cout << "Exit the database." << std::endl;
-			stillWorking = false;
+			workInProgress = false;
 			break;
 
 		default:
 			std::cout << "Please select the option from the list." << std::endl;
 			break;
 		}
+
 	}
+
 }
 
 void bookDatabase::getData() const {
@@ -94,13 +97,7 @@ bool bookDatabase::setData() {
 	while (flagOperation == true) {
 		std::cout << "Please Select the info to be updated" << std::endl;
 
-		std::cout
-			<< "1 - Title" << '\n'
-			<< "2 - Author" << '\n'
-			<< "3 - Publisher" << '\n'
-			<< "4 - Genre" << '\n'
-			<< "0 - Exit"
-			<< std::endl;
+		bookDatabase::dataOption();
 
 		std::cin >> localSelection;
 
@@ -213,11 +210,14 @@ void bookDatabase::displayData() {
 	int localOperation;
 
 	std::cout << "Display Book list" << std::endl;
-	std::cout << "Please Select Display Option" << '\n'
+	std::cout 
+		<< "Please Select Display Option" << '\n'
 		<< "1 - Entire List" << '\n'
 		<< "2 - Sorted by Keyword" << '\n'
 		<< "3 - Collected by Keywordk" << '\n'
-		<< "4 - Exit" << std::endl;
+		<< "4 - Display Customized Data" << '\n'
+		<< "0 - Exit" << '\n'
+		<< std::endl;
 
 	std::cin >> localOperation;
 
@@ -255,10 +255,19 @@ void bookDatabase::displayData() {
 			std::cout << "Display Collected Book List" << std::endl;
 			bookDatabase::collectData();
 			for (auto i : mBookCollect) {
-				std::cout << i << mBookList[i][0] << mBookList[i][1] << mBookList[i][2] << mBookList[i][3] << std::endl;
+				std::cout << 
+					i << 
+					mBookList[i][0] << 
+					mBookList[i][1] << 
+					mBookList[i][2] << 
+					mBookList[i][3] << 
+					std::endl;
 			}
 			break;
 		case 4:
+			bookDatabase::customizedDisplay();
+			break;
+		case 0:
 			std::cout << "Exit Display Menu" << std::endl;
 			break;
 	}
@@ -289,12 +298,8 @@ void bookDatabase::sortData() {
 	int sortOption = 1;
 
 	std::cout << "Sort by" << std::endl;
-	std::cout
-		<< "1 - Title" << '\n'
-		<< "2 - Author" << '\n'
-		<< "3 - Publisher" << '\n'
-		<< "4 - Genre" << '\n'
-		<< "0 - Exit" << std::endl;
+
+	bookDatabase::dataOption();
 
 	std::cin >> localOperation;
 
@@ -341,12 +346,7 @@ void bookDatabase::collectData() {
 	int collectOption = 1;
 	
 	std::cout << "Collect Data by" << std::endl;
-	std::cout
-		<< "1 - Title" << '\n'
-		<< "2 - Author" << '\n'
-		<< "3 - Publisher" << '\n'
-		<< "4 - Genre" << '\n'
-		<< "0 - Exit" << std::endl;
+	bookDatabase::dataOption();
 
 	std::cin >> localOperation;
 
@@ -410,4 +410,77 @@ std::string bookDatabase::InputBookdata() {
 
 	return localISBN;
 
+}
+
+void bookDatabase::customizedDiaplayOption() {
+	int selectedOption = NULL;
+	bool workInProgress = true;
+
+	mFlagCutomizedDisplay = true;
+	mCustomizedDisplayOption.clear();
+
+	while (workInProgress == true) {
+		std::cout << std::endl;
+		std::cout << "Please category to be display" << std::endl;
+		std::cout << "Dispaly order will be based on the selection order" << std::endl;
+		std::cout << "If the selection is done, please choose exit" << std::endl;
+
+		bookDatabase::dataOption();
+
+		std::cin >> selectedOption;
+
+		switch (selectedOption) {
+			case 1:
+				std::cout << "'Title' category is added" << std::endl;
+				mCustomizedDisplayOption.push_back(static_cast<int>(bookOptionParameters::Title));
+				break;
+			case 2:
+				std::cout << "'Author' category is added" << std::endl;
+				mCustomizedDisplayOption.push_back(static_cast<int>(bookOptionParameters::Author));
+				break;
+			case 3:
+				std::cout << "'Publisher' category is added" << std::endl;
+				mCustomizedDisplayOption.push_back(static_cast<int>(bookOptionParameters::Publisher));
+				break;
+			case 4:
+				std::cout << "'Genre' category is added" << std::endl;
+				mCustomizedDisplayOption.push_back(static_cast<int>(bookOptionParameters::Genre));
+				break;
+			case 0:
+				std::cout << "Exit the operation" << std::endl;
+				
+				workInProgress = false;
+				break;
+			default:
+				std::cout << "Not a proper selection, please select the option from the list." << std::endl;
+				break;	
+
+		}
+
+	}
+
+}
+
+void bookDatabase::customizedDisplay() {
+
+	bookDatabase::customizedDiaplayOption();
+
+	for (auto keyValue : mBookList) {
+		std::cout << std::setw(17) << keyValue.first;
+		for (auto contentsDisplay : mCustomizedDisplayOption) {
+			std::cout << std::setw(10) << keyValue.second[contentsDisplay];
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+inline void bookDatabase::dataOption() const {
+	std::cout <<
+		"1 - Title" << '\n' <<
+		"2 - Author" << '\n' <<
+		"3 - Publisher" << '\n' <<
+		"4 - Genre" << '\n' <<
+		"0 - Exit" << '\n' <<
+		std::endl;
 }
